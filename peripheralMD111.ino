@@ -1,4 +1,4 @@
-// peripheralMD102.ino 2022 10 03
+// peripheralMD.ino 2022 10 23
 // largely taken from here with minor changes: https://forum.arduino.cc/t/what-is-the-most-efficient-way-to-send-accelerometer-data-over-ble-to-a-raspberry-pi/926450/12
 
 
