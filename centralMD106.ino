@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// centralMD104.ino 2022 10 03
+// centralMD111.ino 2022 10 23
 // MD: I'm trying to read accel data on one Arduino Nano 33 BLe (peripheral)
 // and read it on another Arduino nano 33 BLE  connected with USB (serial),
 // sending that data to a PD patch.
