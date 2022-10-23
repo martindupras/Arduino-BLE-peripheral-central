@@ -27,6 +27,8 @@ union sensor_data accData;
 union sensor_data gyroData;
 union sensor_data magData;
 
+static BLEDevice peripheral;
+
 void setup() {
 
   Serial.begin(115200);
@@ -37,16 +39,23 @@ void setup() {
     Serial.println("starting BLE failed!");
     while (1);
   }
+
+  connectToPeripheral();  // MD moved from loop()
+
 }
 
 void loop()
 {
-  connectToPeripheral();
+// Here we need to get the updated data as long as connection is active
+    getDataPeripheral(peripheral);
+
+// Also probably test to see if we're still connected; if not, reconnect
 }
 
 void connectToPeripheral()
 {
-  BLEDevice peripheral;
+  // Moved outside of loop to make global
+  // BLEDevice peripheral;
 
   do
   {
@@ -72,7 +81,8 @@ void connectToPeripheral()
     // stop scanning
     BLE.stopScan();
 
-    getDataPeripheral(peripheral);
+// Moved to loop():
+    //getDataPeripheral(peripheral);
 
   }
 }
