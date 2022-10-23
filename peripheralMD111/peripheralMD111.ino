@@ -1,7 +1,6 @@
 // peripheralMD.ino 2022 10 23
 // largely taken from here with minor changes: https://forum.arduino.cc/t/what-is-the-most-efficient-way-to-send-accelerometer-data-over-ble-to-a-raspberry-pi/926450/12
 
-// TOUCH
 /*
  * Example to send all data in one struct
  */
@@ -22,12 +21,13 @@
 // APP & I/O
 //----------------------------------------------------------------------------------------------------------------------
 
-//#define NUMBER_OF_SENSORS 3
+//#define NUMBER_OF_SENSORS 3                     //MD: probably not needed
 
-#define ACC_SENSOR_UPDATE_INTERVAL                (30) // node-red-dashboard can't handle 1 ms, can handle 100 ms.
+#define ACC_SENSOR_UPDATE_INTERVAL                (30) // MD: 30ms works; keep trying different values. 10 didn't work.
 #define MAG_SENSOR_UPDATE_INTERVAL                (30)
 #define GYRO_SENSOR_UPDATE_INTERVAL               (30)
 
+// Union structure for the data for each sensor.
 union sensor_data {
   struct __attribute__((packed)) {
     float values[3]; // float array for data (it holds 3)
@@ -41,8 +41,6 @@ union sensor_data gyroData;
 union sensor_data magData;
 
 
-//const int BLE_LED_PIN = LED_BUILTIN;
-//const int RSSI_LED_PIN = LED_PWR;
 //----------------------------------------------------------------------------------------------------------------------
 // BLE
 //----------------------------------------------------------------------------------------------------------------------
@@ -63,21 +61,17 @@ BLECharacteristic magCharacteristic(BLE_UUID_MAG_CHAR, BLERead | BLENotify, size
 
 void setup()
 {
-  //Serial.begin(9600);
-  //while (!Serial);
-
-  //Serial.println("BLE Example - IMU Service (ESS)");
   pinMode(BLE_LED_PIN, OUTPUT);
   digitalWrite(BLE_LED_PIN, LOW);
   
   if (!IMU.begin()) {
-    Serial.println("Failed to initialize IMU!");
+    // MD-DEBUG Serial.println("Failed to initialize IMU!");
     while (1);
   }
   if (!setupBleMode()) {
     while (1);
   } else {
-    Serial.println("BLE initialized. Waiting for clients to connect.");
+    // MD-DEBUG Serial.println("BLE initialized. Waiting for clients to connect.");
   }
   
   // write initial value
@@ -92,7 +86,7 @@ void loop() {
   
   bleTask();
   if (accSensorTask()) {
-    //accPrintTask();
+    //accPrintTask();      //////// MD removed because not needed right now
   }
   if (gyroSensorTask()){
     //gyroPrintTask();
